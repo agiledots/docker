@@ -1,0 +1,27 @@
+version: "2"
+services:
+  db:
+    image: mysql
+    ports:
+      - 3306:3306
+    hostname: dbserver
+    volumes:
+      - ../mysql/data:/var/lib/mysql
+      - ../mysql/logs:/var/log/mysql
+      - ../mysql/conf.d:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootadmin
+#      - MYSQL_USER=phphmyadmin
+#      - MYSQL_PASSWORD=rootadmin
+#      - MYSQL_DATABASE=opencv
+    container_name: db
+
+  web:
+    depends_on:
+       - db
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    links:
+      - db
+    container_name: web
