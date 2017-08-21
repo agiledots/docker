@@ -1,0 +1,14 @@
+[mysqld]
+skip-host-cache
+skip-name-resolve
+
+character-set-server=utf8
+
+server-id=1
+#
+log-error=/var/log/mysql/error.log
+#
+general_log=1
+general_log_file=/var/log/mysql/query.log
+#
+log-bin=/var/log/mysql/mysql-bin.log

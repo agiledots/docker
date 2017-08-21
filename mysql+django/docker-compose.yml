@@ -1,0 +1,41 @@
+version: "2"
+services:
+  db:
+    image: mysql
+    ports:
+      - 3306:3306
+    hostname: dbserver
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/logs:/var/log/mysql
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/init/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootadmin
+    container_name: opencv-db
+
+  web1:
+    depends_on:
+      - db
+    build: ./web1
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./web1:/code
+    ports:
+      - "8001:8000"
+    links:
+      - db
+    container_name: web1
+
+  web2:
+    depends_on:
+      - db
+    build: ./web2
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./web2:/code
+    ports:
+      - "8002:8000"
+    links:
+      - db
+    container_name: web2
